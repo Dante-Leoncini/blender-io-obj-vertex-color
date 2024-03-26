@@ -465,7 +465,11 @@ def write_file(filepath, objects, depsgraph, scene,
                         # Vert
                         if EXPORT_COLORS:
                             for i, v in enumerate(zip(me_verts, me_colors)):
-                                values = v[0].co[:] + v[1].color[:3]
+                                try:
+                                    values = v[0].co[:] + v[1].color[:3]
+                                except AttributeError:
+                                    # Si ocurre un error al acceder al atributo color, asignar color blanco
+                                    values = v[0].co[:] + (1.0, 1.0, 1.0)  # Color blanco
                                 fw('v %.6f %.6f %.6f %.6f %.6f %.6f\n' % values)
                         else:
                             for v in me_verts:
